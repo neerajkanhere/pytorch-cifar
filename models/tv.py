@@ -26,14 +26,14 @@ class Block(nn.Module):
 class TvNet(nn.Module):
     # (128,2) means conv planes=128, conv stride=2, by default conv stride=1
     #cfg = [64, (128,2), 128, (256,2), 256, (512,2), 512, 512, 512, 512, 512, (1024,2), 1024]
-    cfg = [64, (128,2), 128, (256,2), 256, 256, (512, 2), 512]
+    cfg = [32, (32, 2), 64, (64, 2), 128, (256,2), 256, 256]
 
     def __init__(self, num_classes=10):
         super(TvNet, self).__init__()
-        self.conv1 = nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1, bias=False)
-        self.bn1 = nn.BatchNorm2d(32)
-        self.layers = self._make_layers(in_planes=32)
-        self.linear = nn.Linear(2048, num_classes)
+        self.conv1 = nn.Conv2d(3, 16, kernel_size=5, stride=1, padding=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(16)
+        self.layers = self._make_layers(in_planes=16)
+        self.linear = nn.Linear(1024, num_classes)
 
     def _make_layers(self, in_planes):
         layers = []
