@@ -1,10 +1,9 @@
 # Train CIFAR10 with PyTorch
+Modified from https://github.com/kuangliu/pytorch-cifar
 
-I'm playing with [PyTorch](http://pytorch.org/) on the CIFAR10 dataset.
-
-## Prerequisites
-- Python 3.6+
-- PyTorch 1.0+
+python3 main.py
+python3 export_onnx.py
+python3 test_onnx_inference.py
 
 ## Accuracy
 | Model             | Acc.        |
