@@ -58,25 +58,25 @@ int main(int argc, char* argv[]) {
   
   Ort::RunOptions run_options;
   int N = 1000;
-  
+  std::cout << "======== ONNX ========\n";
   high_resolution_clock::time_point t1 = high_resolution_clock::now();
+  auto output_tensor_ = Ort::Value::CreateTensor<float>(memory_info, results_.data(), results_.size(),
+                                                      output_shape_.data(), output_shape_.size());    
   for(int i=0; i < N; i++) {
     for(auto p = input_image_.begin(); p != input_image_.end(); ++p) { 
       *p = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
     }
     auto input_tensor_ = Ort::Value::CreateTensor<float>(memory_info, input_image_.data(), input_image_.size(),
                                                       input_shape_.data(), input_shape_.size());
-    auto output_tensor_ = Ort::Value::CreateTensor<float>(memory_info, results_.data(), results_.size(),
-                                                       output_shape_.data(), output_shape_.size());    
     session_.Run(run_options, input_names, &input_tensor_, 1, output_names, &output_tensor_, 1);
     softmax(results_);
   }
   high_resolution_clock::time_point t2 = high_resolution_clock::now();
   duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
   int msec = time_span.count() * 1000;
-  std::cout << msec << std::endl;
+  std::cout << msec << " msec for " << N << " iterations\n";
   
-  
+  std::cout << "======== OpenCV ========\n";
   cv::setNumThreads(1);
   cv::dnn::Net net = cv::dnn::readNet("./model.onnx");
   cv::Scalar mean{0.4151, 0.3771, 0.4568};
@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
   t1 = high_resolution_clock::now();
   for(int i=0; i < N; i++) {
     cv::Mat img(width_, height_, CV_8UC3);
-    cv::randu(img, cv::Scalar(0, 0, 0), cv::Scalar(255, 255, 255));
+    //cv::randu(img, cv::Scalar(0, 0, 0), cv::Scalar(255, 255, 255));
     cv::dnn::blobFromImage(img, blob, 1.0, cv::Size(width_, height_), mean, false, false);
     net.setInput(blob);
     cv::Mat prob = net.forward();
@@ -92,5 +92,5 @@ int main(int argc, char* argv[]) {
   t2 = high_resolution_clock::now();
   time_span = duration_cast<duration<double>>(t2 - t1);
   msec = time_span.count() * 1000;
-  std::cout << msec << std::endl;
+  std::cout << msec << " msec for " << N << " iterations\n";
 } 

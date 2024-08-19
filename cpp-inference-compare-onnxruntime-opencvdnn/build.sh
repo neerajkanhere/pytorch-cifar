@@ -1,2 +1,1 @@
-source ./environment
-g++ -O0 -ggdb `pkg-config --cflags opencv4` main.cpp -L/opt/z/onnxruntime/build/Linux/RelWithDebInfo -lonnxruntime `pkg-config --libs opencv4` -o test
+g++ -O3 -ggdb `pkg-config --cflags opencv4` main.cpp `pkg-config --libs opencv4` -lonnxruntime -o test

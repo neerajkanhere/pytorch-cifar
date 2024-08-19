@@ -1,3 +1,0 @@
-export PKG_CONFIG_PATH=/opt/z/tmc4/libs/pkgconfig
-export LD_LIBRARY_PATH=/opt/z/tmc4/libs/lib
-
