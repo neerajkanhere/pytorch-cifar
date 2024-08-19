@@ -1,0 +1,4 @@
+export PKG_CONFIG_PATH=/opt/z/tmc4/libs/pkgconfig
+export CPLUS_INCLUDE_PATH=/opt/z/onnxruntime/include/onnxruntime/core/session/
+export LD_LIBRARY_PATH=/opt/z/onnxruntime/build/Linux/RelWithDebInfo:/opt/z/tmc4/libs/lib
+
