@@ -11,6 +11,11 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 #include <vector>
+#include <ratio>
+#include <chrono>
+
+using namespace std::chrono;
+
 
 std::vector<std::string> readLabels(std::string& labelFilepath) {
   std::vector<std::string> labels;
@@ -34,32 +39,29 @@ std::vector<float> sigmoid(const std::vector<float>& m1) {
 int main(int argc, char* argv[]) {
   int inpWidth = 32;
   int inpHeight = 32;
-  std::string modelFilepath{
-      "./"
-      "model.onnx"};
-  std::string labelFilepath{
-      "./"
-      "classes.txt"};
-  std::string imageFilepath{argv[1]};
-
-  std::vector<std::string> labels{readLabels(labelFilepath)};
-  cv::Mat image = cv::imread(imageFilepath, cv::ImreadModes::IMREAD_COLOR);
+  cv::dnn::Net net = cv::dnn::readNet("./model.onnx");
+      
+  cv::Mat image = cv::imread(argv[1], cv::ImreadModes::IMREAD_COLOR);
 
   cv::Mat blob;
   cv::Scalar mean{0.4151, 0.3771, 0.4568};
   cv::Scalar std{0.2011, 0.2108, 0.1896};
   bool swapRB = false;
   bool crop = false;
+  high_resolution_clock::time_point t1 = high_resolution_clock::now();  
   cv::dnn::blobFromImage(image, blob, 1.0, cv::Size(inpWidth, inpHeight), mean,
                          swapRB, crop);
   if (std.val[0] != 0.0 && std.val[1] != 0.0 && std.val[2] != 0.0) {
     cv::divide(blob, std, blob);
   }
 
-  cv::dnn::Net net = cv::dnn::readNet(modelFilepath);
   net.setInput(blob);
   cv::Mat prob = net.forward();
   std::cout << prob << std::endl;
+
+  high_resolution_clock::time_point t2 = high_resolution_clock::now();
+  duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+  int msec = time_span.count() * 1000;
 
   // Apply sigmoid
   cv::Mat probReshaped = prob.reshape(1, prob.total() * prob.channels());
@@ -71,6 +73,6 @@ int main(int argc, char* argv[]) {
   double confidence;
   minMaxLoc(prob.reshape(1, 1), 0, &confidence, 0, &classIdPoint);
   int classId = classIdPoint.x;
-  std::cout << " ID " << classId << " - " << labels[classId] << " confidence "
-            << confidence << std::endl;
+  std::cout << " ID " << classId << " - " << " confidence "
+            << confidence << " - msec: " << msec << std::endl;
 }
