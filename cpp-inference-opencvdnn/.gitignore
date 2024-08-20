@@ -1,4 +1,0 @@
-test
-*.onnx
-.cache/*
-compile_commands.json
