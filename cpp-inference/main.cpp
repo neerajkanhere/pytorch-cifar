@@ -67,7 +67,6 @@ int main(int argc, char* argv[]) {
   cv::Mat input_blob;
   cv::Mat img_input(width, height, CV_8UC3, cv::Scalar{0, 0, 0});
   cv::dnn::blobFromImage(img_input, input_blob);  // Test with all-zero tensor to compare with python output
-  // input_blob = Bgr24MatToBlob(img_input, {width, height});
 
   std::array<int64_t, 2> output_shape_{1, 10};
   std::array<float, output_size> output_onnx{};
