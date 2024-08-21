@@ -1,7 +1,7 @@
 # Train CIFAR10 with PyTorch
 Modified from https://github.com/kuangliu/pytorch-cifar
 
-python3 main.py
+python3 train.py
 python3 export_onnx.py
 python3 test_onnx_inference.py
 
