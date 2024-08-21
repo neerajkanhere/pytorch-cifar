@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
   int N = 1000;
   std::cout << "======== ONNX ========\n";
   const char* input_names[] = {"input.1"};
-  const char* output_names[] = {"255"};
+  const char* output_names[] ={"255"}; // mobilenetv1{"255"} mobilenetv2{"518"};
   auto memory_info = Ort::MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeCPU);
   auto output_tensor = Ort::Value::CreateTensor<float>(memory_info, output_onnx.data(), output_onnx.size(),
                                                        output_shape_.data(), output_shape_.size());
