@@ -1,4 +1,6 @@
 test
 *.onnx
+*.bin
+*.xml
 .cache/*
 compile_commands.json
